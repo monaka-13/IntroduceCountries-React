@@ -5,7 +5,7 @@ const Header = () => {
 }
 const Card = (props) => {
   return (
-    <div className="country">
+    <div className="country" onDoubleClick={() => props.removeCountry(props.country.id)}>
       <h3 className="country-name">{props.country.name}</h3>
       <img className="country-flag" src={props.country.flags} alt="Japan flag" />
       <div className="content">
@@ -482,15 +482,19 @@ class App extends React.Component {
       (sum, current) => sum + current.population,
       0
     );
-  }
-
+  };
+  removeCountry = (id) => {
+    return this.setState(prevState => ({
+      used: prevState.used.filter(p => p.id !== id)
+    }));
+  };
   render() {
     return (
       <div>
         <Header />
         <div className="countries">
           {this.state.used.map(country => (
-            <Card country={country} key={country.id} />
+            <Card country={country} key={country.id} removeCountry={this.removeCountry} />
           ))}
         </div>
         <Footer totalPopulation={this.getTotalPopulation().toLocaleString()} />
