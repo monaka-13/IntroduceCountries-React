@@ -12,7 +12,7 @@ const Card = (props) => {
         <h3>Capital</h3>
         <p>{props.country.capital}</p>
         <h3>Population</h3>
-        <p>{props.country.population}</p>
+        <p>{props.country.population.toLocaleString()}</p>
       </div>
     </div>
   );
@@ -22,6 +22,17 @@ const Footer = (props) => {
     <footer>Total Population: {props.totalPopulation}</footer>
   );
 }
+
+const SortButton = (props) => {
+  return (
+    <div>
+      sort in...
+      <button onClick={() => props.sortInPopulation()} >Population</button>
+      <button onClick={() => props.sortInName()}>Name</button>
+    </div>
+  );
+}
+
 class App extends React.Component {
   state = {
     countries: [
@@ -488,10 +499,31 @@ class App extends React.Component {
       used: prevState.used.filter(p => p.id !== id)
     }));
   };
+  sortInPopulation = () => {
+    const tempUsed = this.state.used.sort((a, b) => a.population - b.population);
+    this.setState(() => ({
+      used: tempUsed
+    }));
+  }
+  sortInName = () => {
+    const tempUsed = this.state.used.sort((a, b) => {
+      if (a.name.toUpperCase() < b.name.toUpperCase()) {
+        return -1;
+      }
+      if (a.name.toUpperCase() > b.name.toUpperCase()) {
+        return 1;
+      }
+      return 0;
+    });
+    this.setState(() => ({
+      used: tempUsed
+    }));
+  };
   render() {
     return (
       <div>
         <Header />
+        <SortButton sortInPopulation={this.sortInPopulation} sortInName={this.sortInName} />
         <div className="countries">
           {this.state.used.map(country => (
             <Card country={country} key={country.id} removeCountry={this.removeCountry} />
