@@ -1,16 +1,25 @@
 const Header = () => {
   return (
-    <div>Header</div>
+    <header>Introduce Countries for React</header>
   );
 }
 const Card = () => {
   return (
-    <div>Card</div>
+    <div className="country">
+      <h3 className="country-name">Japan</h3>
+      <img className="country-flag" src="https://flagcdn.com/w320/jp.png" alt="Japan flag" />
+      <div className="content">
+        <h3>Capital</h3>
+        <p>Tokyo</p>
+        <h3>Population</h3>
+        <p>130,000,000</p>
+      </div>
+    </div>
   );
 }
 const Footer = () => {
   return (
-    <div>Footer</div>
+    <footer>Footer</footer>
   );
 }
 class App extends React.Component {
@@ -457,7 +466,11 @@ class App extends React.Component {
     return (
       <div>
         <Header />
-        <Card />
+        <div className="countries">
+          <Card />
+          <Card />
+          <Card />
+        </div>
         <Footer />
       </div>
     );
