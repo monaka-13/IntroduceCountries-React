@@ -3,23 +3,23 @@ const Header = () => {
     <header>Introduce Countries for React</header>
   );
 }
-const Card = () => {
+const Card = (props) => {
   return (
     <div className="country">
-      <h3 className="country-name">Japan</h3>
-      <img className="country-flag" src="https://flagcdn.com/w320/jp.png" alt="Japan flag" />
+      <h3 className="country-name">{props.country.name}</h3>
+      <img className="country-flag" src={props.country.flags} alt="Japan flag" />
       <div className="content">
         <h3>Capital</h3>
-        <p>Tokyo</p>
+        <p>{props.country.capital}</p>
         <h3>Population</h3>
-        <p>130,000,000</p>
+        <p>{props.country.population}</p>
       </div>
     </div>
   );
 }
-const Footer = () => {
+const Footer = (props) => {
   return (
-    <footer>Footer</footer>
+    <footer>Total Population: {props.totalPopulation}</footer>
   );
 }
 class App extends React.Component {
@@ -462,16 +462,38 @@ class App extends React.Component {
     ],
     used: []
   };
+  componentDidMount() {
+    this.chooseRandomCountries();
+  }
+  chooseRandomCountries = () => {
+    const tempCountries = this.state.countries;
+    const tempUsed = [];
+    for (let i = 0; i < 6; i++) {
+      let index = Math.floor(Math.random() * tempCountries.length);
+      tempUsed.push(tempCountries.splice(index, 1)[0]);
+    }
+    this.setState(() => ({
+      countries: tempCountries,
+      used: tempUsed
+    }));
+  };
+  getTotalPopulation = () => {
+    return this.state.used.reduce(
+      (sum, current) => sum + current.population,
+      0
+    );
+  }
+
   render() {
     return (
       <div>
         <Header />
         <div className="countries">
-          <Card />
-          <Card />
-          <Card />
+          {this.state.used.map(country => (
+            <Card country={country} key={country.id} />
+          ))}
         </div>
-        <Footer />
+        <Footer totalPopulation={this.getTotalPopulation().toLocaleString()} />
       </div>
     );
   }
